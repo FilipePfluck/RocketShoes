@@ -15,7 +15,7 @@ export const Container = styled.header`
     }
   }
 
-  @media (max-width: 400px){
+  @media (max-width: 500px){
     img{
       width: 80%;
       height: 80%;
@@ -42,7 +42,7 @@ export const Cart = styled(Link)`
       color: #999;
     }
   
-    @media (max-width: 400px){
+    @media (max-width: 500px){
       display: none;
     }
   }

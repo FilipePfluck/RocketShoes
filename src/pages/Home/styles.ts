@@ -67,11 +67,11 @@ export const ProductList = styled.ul`
     }
   }
 
-  @media (max-width: 800px){
+  @media (max-width: 1000px){
     grid-template-columns: 1fr 1fr;
   }
 
-  @media (max-width: 400px){
+  @media (max-width: 600px){
     display: flex;
     flex-direction: column;
   }
