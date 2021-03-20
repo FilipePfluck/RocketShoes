@@ -35,7 +35,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [products, setProducts] = useState<Omit<Product, 'amount'>[]>([])
   const [stock, setStock] = useState<Stock[]>([])
 
-  useEffect(()=>{
+/*   useEffect(()=>{
     api.get('/stock').then(response=>{
       setStock(response.data)
     })
@@ -45,7 +45,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     api.get('/products').then(response=>{
       setProducts(response.data)
     })
-  },[])
+  },[]) */
 
   const findProductInCar = (id: number)=>{
     const index = cart.findIndex(cartItem => {
@@ -55,55 +55,31 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     return cart[index]
   }
 
-  const findProduct = (id: number)=>{
-    const productIndex = products.findIndex(product=>{
-      return product.id === id
-    })
-
-    const product = products[productIndex]
-
-    return product
-  }
-
-  const findProductInStock = (id: number)=>{
-    const stockIndex = stock.findIndex(stockItem => {
-      return stockItem.id === id
-    })
-
-    const productInStock = stock[stockIndex]
-
-    return productInStock
-  }
-
   const addProduct = async (productId: number) => {
     try {
-      const product = findProduct(productId)
-
-      if(!product){
-        toast.error('Erro na adição do produto')
-        return
-      }
 
       const productInTheCar = findProductInCar(productId)
 
       let newArray: Product[]
 
-      if(!!productInTheCar){
+      if(productInTheCar){
         updateProductAmount({
           productId: productInTheCar.id, 
-          amount: productInTheCar.amount + 1}
-        )
-        return
+          amount: productInTheCar.amount + 1
+        })
+
       }else{
+        const { data: product } = await api.get(`/products/${productId}`)
+
         newArray = [...cart, {...product, amount: 1}]
+
+        localStorage.setItem(
+          '@RocketShoes:cart', 
+          JSON.stringify(newArray)
+        )
+  
+        setCart(newArray)
       }
-
-      localStorage.setItem(
-        '@RocketShoes:cart', 
-        JSON.stringify(newArray)
-      )
-
-      setCart(newArray)
     } catch {
       toast.error('Erro na adição do produto')
     }
@@ -138,7 +114,13 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     amount,
   }: UpdateProductAmount) => {
     try {
-      const productInStock = findProductInStock(productId)
+      const { data: productInStock } = await api.get(`/stock/${productId}`)
+
+      console.log(productInStock)
+
+      if(amount < 1){
+        return 
+      }
 
       if(productInStock.amount < amount){
         toast.error('Quantidade solicitada fora de estoque')
@@ -147,10 +129,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
       const newArray = cart.map(cartItem => {
         if(cartItem.id === productId){
-          if(amount < 1){
-            return {...cartItem, amount: 1}
-          }
-
           return {...cartItem, amount: amount}
         }
 
