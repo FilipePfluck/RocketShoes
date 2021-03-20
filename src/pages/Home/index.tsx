@@ -31,10 +31,6 @@ const Home = (): JSX.Element => {
     return sumAmount
   }, {} as CartItemsAmount)
 
-  useEffect(()=>{
-    console.log(cartItemsAmount)
-  },[cartItemsAmount])
-
   useEffect(() => {
     async function loadProducts() {
       api.get('/products').then(response => {
@@ -44,10 +40,6 @@ const Home = (): JSX.Element => {
 
     loadProducts();
   }, []);
-
-  useEffect(()=>{
-    console.log(cart)
-  },[cart])
 
   function handleAddProduct(id: number) {
     addProduct(id)
