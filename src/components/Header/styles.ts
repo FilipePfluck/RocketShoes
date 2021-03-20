@@ -14,6 +14,13 @@ export const Container = styled.header`
       opacity: 0.7;
     }
   }
+
+  @media (max-width: 400px){
+    img{
+      width: 80%;
+      height: 80%;
+    }
+  }
 `;
 
 export const Cart = styled(Link)`
@@ -33,6 +40,10 @@ export const Cart = styled(Link)`
     span {
       font-size: 12px;
       color: #999;
+    }
+  
+    @media (max-width: 400px){
+      display: none;
     }
   }
 `;

@@ -95,6 +95,60 @@ export const ProductTable = styled.table`
       }
     }
   }
+
+  @media (max-width: 760px){
+
+    table, thead, tbody, th, td, tr { 
+      display: block; 
+    }
+
+    thead tr { 
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+
+    tr{
+      margin-top: 16px;
+      position: relative;
+    }
+
+    tr { border: 1px solid #ccc; }
+	
+    td { 
+
+      /* Behave  like a "row" */
+      border: none;
+      position: relative;
+      padding-left: 50%; 
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img{
+        height: 80%;
+        width: 80%;
+      }
+    }
+    
+    td:before { 
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%; 
+      padding-right: 10px; 
+      white-space: nowrap;
+    }
+
+    td:nth-of-type(5){
+      position: absolute;
+      top: 0px;
+      right: 0px;
+    }
+  }
 `;
 
 export const Total = styled.div`
@@ -104,10 +158,18 @@ export const Total = styled.div`
   span {
     color: #999;
     font-weight: bold;
+
+    @media (max-width: 600px){
+      display: none;
+    }
   }
 
   strong {
     font-size: 28px;
     margin-left: 5px;
+
+    @media (max-width: 600px){
+      font-size: 20px;
+    }
   }
 `;

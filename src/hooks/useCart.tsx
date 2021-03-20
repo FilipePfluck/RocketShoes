@@ -32,27 +32,19 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     return [];
   });
 
-  const [products, setProducts] = useState<Omit<Product, 'amount'>[]>([])
-  const [stock, setStock] = useState<Stock[]>([])
-
-/*   useEffect(()=>{
-    api.get('/stock').then(response=>{
-      setStock(response.data)
-    })
-  },[])
-
   useEffect(()=>{
-    api.get('/products').then(response=>{
-      setProducts(response.data)
-    })
-  },[]) */
+    localStorage.setItem(
+      '@RocketShoes:cart', 
+      JSON.stringify(cart)
+    )
+  },[cart])
 
   const findProductInCar = (id: number)=>{
-    const index = cart.findIndex(cartItem => {
+    const product = cart.find(cartItem => {
       return cartItem.id === id
     })
 
-    return cart[index]
+    return product
   }
 
   const addProduct = async (productId: number) => {
@@ -98,11 +90,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         return cartItem.id !== productId
       })
 
-      localStorage.setItem(
-        '@RocketShoes:cart', 
-        JSON.stringify(newArray)
-      )
-
       setCart(newArray)
     } catch {
       toast.error('Erro na remoção do produto')
@@ -116,10 +103,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     try {
       const { data: productInStock } = await api.get(`/stock/${productId}`)
 
-      console.log(productInStock)
-
       if(amount < 1){
-        return 
+        removeProduct(productId)
+        return
       }
 
       if(productInStock.amount < amount){
@@ -134,11 +120,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
         return cartItem
       })
-
-      localStorage.setItem(
-        '@RocketShoes:cart', 
-        JSON.stringify(newArray)
-      )
 
       setCart(newArray)
     } catch {
